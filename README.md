@@ -51,6 +51,7 @@ This repository demonstrates **how to run Claude Code in a multi-container Docke
 - 🎭 **Remote Browser Automation** - Playwright service in separate container with HTTP API
 - 🔒 **Security Hardened** - Service isolation, no privileged containers, pinned dependencies
 - 📖 **Extensively Documented** - Comprehensive documentation explaining the architecture
+- 🍽️ **Forked to use Local LLM** - This fork contains the config to hook up to a local (llama) LLM
 
 ### Why Use Claude Code in a Multi-Container DevContainer?
 
@@ -273,6 +274,27 @@ Pre-configured client library and tools for remote browser automation:
 
 ---
 
+### hooked up to a local LLM (llama) container
+
+- The llama docker container is outside the scope of this repo, as that llama docker should be running as a non-disposable container.
+- Assumes a llama-docker is running on the host under the `llama-network` at port 8001, with API access allowed and an API_KEY set.
+- An example of a llama-docker container can be found at <https://github.com/ImagineerNL/llama-container> (current config is intended to connect seamlessly)
+- Changes to the original `./.devcontainer/docker-compose.yml` :
+
+```yaml
+services:
+  workspace:
+    environment:
+    - ANTHROPIC_BASE_URL=llama-docker:8001
+    - ANTHROPIC_API_KEY=sk-dummy-key
+    networks:
+      - llama-network
+networks:
+  llama-network:
+    name: llama-network
+    external: true
+```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -290,6 +312,9 @@ Pre-configured client library and tools for remote browser automation:
 
 3. **Git** for cloning the repository
    - [Install Git](https://git-scm.com/downloads)
+
+4. **local llama container up and running**
+   - configured out of the box to work with <https://github.com/ImagineerNL/llama-container> 
 
 ### Setup Steps
 
@@ -1650,7 +1675,7 @@ Need help? Here's how to get support:
 
 <div align="center">
 
-**⭐ Star this repository if you find it useful!**
+**⭐ Star the [original repository by Micheal Hannecke](https://github.com/michaelhannecke/claude_in_devcontainer) if you find it useful!**
 
 Made with ❤️ for developers who want to use **Claude Code in a fully-featured, isolated Docker environment**.
 

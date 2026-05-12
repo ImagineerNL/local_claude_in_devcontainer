@@ -120,12 +120,15 @@ services:
       # Path to virtual environment
       - VIRTUAL_ENV=/home/vscode/.venv
 
+      # Connect to a (llama) Local LLM docker with dummy api key
+      - ANTHROPIC_BASE_URL=llama-docker:8001
+      - ANTHROPIC_API_KEY=sk-dummy-key
     # -------------------------------------------------------------------------
     # NETWORKING
     # -------------------------------------------------------------------------
     networks:
       - playwright-network
-
+      - llama-network # For connecting to an external llama docker, also see 'networks' below
     # -------------------------------------------------------------------------
     # PORT FORWARDING
     # -------------------------------------------------------------------------
@@ -302,6 +305,10 @@ networks:
     name: playwright-network
     # Enable DNS for service name resolution
     # workspace can reach playwright via "playwright:3000"
+  llama-network:
+    name: llama-network
+    external: true
+    # Hook up to an externally set up llama-network configged by a llama-docker compose
 
 # ============================================================================
 # VOLUMES
